@@ -70,10 +70,10 @@ if __name__ == "__main__":
 
     dir_helper.set_path(DEPLOYMENT_DIR)
 
-    CommandHelper(f"git config --global user.email {USER_GIT_EMAIL!r}").run_to_stdout()
-    CommandHelper(f"git config --global user.name {USER_GIT_NAME!r}").run_to_stdout()
-    CommandHelper("git config --global push.default simple").run_to_stdout()
-    CommandHelper("git config --local pull.rebase false").run_to_stdout()
+    CommandHelper(f"git config --global user.email {USER_GIT_EMAIL!r}").execute()
+    CommandHelper(f"git config --global user.name {USER_GIT_NAME!r}").execute()
+    CommandHelper("git config --global push.default simple").execute()
+    CommandHelper("git config --local pull.rebase false").execute()
 
     for repo in gh.get_organization(ORG_NAME).get_repos():
         if repo.name in REPOS_TO_IGNORE:
@@ -119,8 +119,9 @@ if __name__ == "__main__":
                     os.path.join(local_dir_helper.path, file)
                 )
 
+        CommandHelper(f"cd {clone_destination}").execute(raise_on_error=True)
+
         if commit_count > 1000:
-            CommandHelper(f"cd {clone_destination}").execute(raise_on_error=True)
             DirectoryHelper(os.path.join(clone_destination, ".git")).delete()
 
             CommandHelper("git init").execute()
