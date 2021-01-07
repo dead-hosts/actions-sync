@@ -112,4 +112,6 @@ if __name__ == "__main__":
             f"cd {clone_destination} && git add --all && git commit -a "
             f"{COMMIT_MESSAGE!r} && git push && cd -"
         ).run_to_stdout()
+
+        DirectoryHelper(clone_destination).delete()
         print("Finished to handle:", repo.name)
