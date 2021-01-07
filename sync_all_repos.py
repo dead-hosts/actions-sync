@@ -84,6 +84,9 @@ if __name__ == "__main__":
         if repo.name in REPOS_TO_IGNORE:
             continue
 
+
+        print("Starting to handle:", repo.name)
+
         repo_slug = f"{ORG_NAME}/{repo.name}"
         clone_url = CLONE_TEMPLATE.replace("%slug%", repo_slug)
         clone_destination = f"{CLONE_DIR}/{repo.name}"
@@ -111,3 +114,4 @@ if __name__ == "__main__":
             f"cd {clone_destination} && git add --all && git commit -a "
             f"{COMMIT_MESSAGE!r} && git push && cd -"
         ).execute(raise_on_error=True)
+        print("Finished to handle:", repo.name)
