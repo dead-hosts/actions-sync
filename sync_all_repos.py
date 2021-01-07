@@ -89,7 +89,10 @@ if __name__ == "__main__":
         clone_url = CLONE_TEMPLATE.replace("%slug%", repo_slug)
         clone_destination = f"{CLONE_DIR}/{repo.name}"
 
-        CommandHelper(f"git clone {clone_url} {clone_destination}").run_to_stdout()
+        response = CommandHelper(f"git clone {clone_url} {clone_destination}").run()
+
+        for line in response:
+            print(line)
 
         for root, _, files in os.walk(dir_helper.path):
             unformatted_root = root
@@ -108,10 +111,13 @@ if __name__ == "__main__":
                     os.path.join(local_dir_helper.path, file)
                 )
 
-        CommandHelper(
+        response =CommandHelper(
             f"cd {clone_destination} && git add --all && git commit -a "
             f"{COMMIT_MESSAGE!r} && git push && cd -"
-        ).run_to_stdout()
+        ).run()
+
+        for line in response:
+            print(line)
 
         DirectoryHelper(clone_destination).delete()
         print("Finished to handle:", repo.name)
