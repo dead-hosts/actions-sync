@@ -55,6 +55,7 @@ REPOS_TO_IGNORE = [
     "template",
     "actions-sync",
     "infrastructure-launcher",
+    "infrastructure-monitoring",
     "dev-center",
 ]
 
