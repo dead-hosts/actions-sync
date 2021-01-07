@@ -70,16 +70,13 @@ if __name__ == "__main__":
 
     dir_helper.set_path(DEPLOYMENT_DIR)
 
-    CommandHelper(f"git config --global user.email {USER_GIT_EMAIL!r}").execute(
-        raise_on_error=True
+    CommandHelper(f"git config --global user.email {USER_GIT_EMAIL!r}").run_to_stdout(
     )
-    CommandHelper(f"git config --global user.name {USER_GIT_NAME!r}").execute(
-        raise_on_error=True
+    CommandHelper(f"git config --global user.name {USER_GIT_NAME!r}").run_to_stdout(
     )
-    CommandHelper("git config --global push.default simple").execute(
-        raise_on_error=True
+    CommandHelper("git config --global push.default simple").run_to_stdout(
     )
-    CommandHelper("git config --local pull.rebase false").execute(raise_on_error=True)
+    CommandHelper("git config --local pull.rebase false").run_to_stdout()
 
     for repo in gh.get_organization(ORG_NAME).get_repos():
         if repo.name in REPOS_TO_IGNORE:
@@ -114,5 +111,5 @@ if __name__ == "__main__":
         CommandHelper(
             f"cd {clone_destination} && git add --all && git commit -a "
             f"{COMMIT_MESSAGE!r} && git push && cd -"
-        ).execute(raise_on_error=True)
+        ).run_to_stdout()
         print("Finished to handle:", repo.name)
