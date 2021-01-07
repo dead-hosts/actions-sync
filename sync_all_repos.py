@@ -113,7 +113,7 @@ if __name__ == "__main__":
 
         response =CommandHelper(
             f"cd {clone_destination} && git add --all && git commit -a "
-            f"{COMMIT_MESSAGE!r} && git push && cd -"
+            f"-m {COMMIT_MESSAGE!r} && git push && cd -"
         ).run()
 
         for line in response:
