@@ -1,0 +1,2 @@
+PyGithub
+PyFunceble-dev>=4.0.0a1

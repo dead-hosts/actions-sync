@@ -1,0 +1,39 @@
+name: Synchronize our settings with all repositories
+on:
+  push:
+    branches:
+      - "master"
+
+jobs:
+  synchronize:
+    name: Synchronize repositories.
+
+    runs-on: "${{ matrix.os }}"
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python_version:
+          - "3.9.1"
+        os:
+          - ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        name: Clone repository
+
+      - name: Set up Python ${{ matrix.python_version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python_version }}
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run synchronization
+        run: python sync_all_repos.py
+        env:
+          GITHUB_TOKEN: ${{ secrets.BOT_REPO_PAT }}
+          GIT_NAME: ${{ secrets.GIT_BOT_NAME }}
+          GIT_EMAIL: ${{ secrets.GIT_BOT_EMAIL }}
