@@ -96,7 +96,7 @@ if __name__ == "__main__":
         config_file_instance = FileHelper(
             os.path.join(clone_destination, ".git", "config")
         )
-        config_file_content = config_file_content.read()
+        config_file_content = config_file_instance.read()
 
         commit_count = int(
             CommandHelper("git rev-list --all --count").execute().split()[0]
