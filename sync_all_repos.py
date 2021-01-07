@@ -85,7 +85,10 @@ if __name__ == "__main__":
         clone_url = CLONE_TEMPLATE.replace("%slug%", repo_slug)
         clone_destination = f"{CLONE_DIR}/{repo.name}"
 
-        response = CommandHelper(f"git clone {clone_url} {clone_destination}").run()
+        if not DirectoryHelper(clone_destination).exists():
+            response = CommandHelper(f"git clone {clone_url} {clone_destination}").run()
+        else:
+            response = CommandHelper(f"cd {clone_destination} && git pull").run()
 
         for line in response:
             print(line)
