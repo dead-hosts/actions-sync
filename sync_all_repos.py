@@ -93,6 +93,15 @@ if __name__ == "__main__":
         for line in response:
             print(line)
 
+        config_file_instance = FileHelper(
+            os.path.join(clone_destination, ".git", "config")
+        )
+        config_file_content = config_file_content.read()
+
+        commit_count = int(
+            CommandHelper("git rev-list --all --count").execute().split()[0]
+        )
+
         for root, _, files in os.walk(dir_helper.path):
             unformatted_root = root
             root = root.replace(dir_helper.path, "")
@@ -110,10 +119,26 @@ if __name__ == "__main__":
                     os.path.join(local_dir_helper.path, file)
                 )
 
-        response = CommandHelper(
-            f"cd {clone_destination} && git add --all && git commit -a "
-            f"-m {COMMIT_MESSAGE!r} && git push && cd -"
-        ).run()
+        if commit_count > 1000:
+            CommandHelper(f"cd {clone_destination}").execute(raise_on_error=True)
+            DirectoryHelper(os.path.join(clone_destination, ".git")).delete()
+
+            CommandHelper("git init").execute()
+
+        CommandHelper("git add --all && git commit -m {COMMIT_MESSAGE!r}")
+
+
+        if commit_count > 1000:
+            config_file_instance.write(config_file_content, overwrite=True)
+            print(
+                CommandHelper("git push -u --force origin master").execute(
+                    raise_on_error=True
+                )
+            )
+        else:
+            print(CommandHelper("git push").execute(raise_on_error=True))
+
+        CommandHelper("cd -").execute(raise_on_error=True)
 
         for line in response:
             print(line)
